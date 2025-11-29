@@ -37,16 +37,19 @@ You need to have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/
    ```sh
    git clone <YOUR_GIT_URL>
    ```
+
 2. **Navigate to the project directory:**
 
    ```sh
    cd <YOUR_PROJECT_NAME>
    ```
+
 3. **Install NPM packages:**
 
    ```sh
    npm install
    ```
+
 4. **Set up Firebase:**
 
    - Create a new Firebase project in the [Firebase Console](https://console.firebase.google.com/).
@@ -64,7 +67,7 @@ You need to have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/
      projectId: "YOUR_PROJECT_ID",
      storageBucket: "YOUR_STORAGE_BUCKET",
      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-     appId: "YOUR_APP_ID"
+     appId: "YOUR_APP_ID",
    };
 
    const app = initializeApp(firebaseConfig);
@@ -77,6 +80,7 @@ You need to have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/
    ```
 
    - Make sure to enable Firestore and Storage in your Firebase project.
+
 5. **Run the development server:**
 
    ```sh
