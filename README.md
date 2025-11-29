@@ -1,6 +1,6 @@
 # Lost and Found Application
 
-This is a modern, responsive web application designed to help people post and find lost or found items. It features a clean, dark-themed interface and a simple, intuitive user experience.
+This is a modern, responsive web application designed to help people post and find lost or found items. It features a clean, dark-themed interface and a simple, intuitive user experience with real images.
 
 ## Key Features
 
@@ -32,54 +32,58 @@ You need to have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/
 
 ### Installation & Setup
 
-1.  **Clone the repository:**
-    ```sh
-    git clone <YOUR_GIT_URL>
-    ```
+1. **Clone the repository:**
 
-2.  **Navigate to the project directory:**
-    ```sh
-    cd <YOUR_PROJECT_NAME>
-    ```
+   ```sh
+   git clone <YOUR_GIT_URL>
+   ```
+2. **Navigate to the project directory:**
 
-3.  **Install NPM packages:**
-    ```sh
-    npm install
-    ```
+   ```sh
+   cd <YOUR_PROJECT_NAME>
+   ```
+3. **Install NPM packages:**
 
-4.  **Set up Firebase:**
-    - Create a new Firebase project in the [Firebase Console](https://console.firebase.google.com/).
-    - In your project settings, add a new web app and copy the `firebaseConfig` object.
-    - Create a new file `src/lib/firebase.ts` and add your Firebase configuration like so:
-    ```ts
-    import { initializeApp } from "firebase/app";
-    import { getFirestore } from "firebase/firestore";
-    import { getStorage } from "firebase/storage";
+   ```sh
+   npm install
+   ```
+4. **Set up Firebase:**
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+   - Create a new Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+   - In your project settings, add a new web app and copy the `firebaseConfig` object.
+   - Create a new file `src/lib/firebase.ts` and add your Firebase configuration like so:
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+   ```ts
+   import { initializeApp } from "firebase/app";
+   import { getFirestore } from "firebase/firestore";
+   import { getStorage } from "firebase/storage";
 
-    // Add your item management functions here...
-    
-    export { db, storage };
-    ```
-    - Make sure to enable Firestore and Storage in your Firebase project.
+   const firebaseConfig = {
+     apiKey: "YOUR_API_KEY",
+     authDomain: "YOUR_AUTH_DOMAIN",
+     projectId: "YOUR_PROJECT_ID",
+     storageBucket: "YOUR_STORAGE_BUCKET",
+     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+     appId: "YOUR_APP_ID"
+   };
 
-5.  **Run the development server:**
-    ```sh
-    npm run dev
-    ```
-    This will start the application on a local development server, typically `http://localhost:5173`.
+   const app = initializeApp(firebaseConfig);
+   const db = getFirestore(app);
+   const storage = getStorage(app);
+
+   // Add your item management functions here...
+
+   export { db, storage };
+   ```
+
+   - Make sure to enable Firestore and Storage in your Firebase project.
+5. **Run the development server:**
+
+   ```sh
+   npm run dev
+   ```
+
+   This will start the application on a local development server, typically `http://localhost:5173`.
 
 ## Deployment
 
