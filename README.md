@@ -1,6 +1,6 @@
 # Lost and Found Application
 
-This is a modern, responsive web application designed to help people post and find lost or found items. It features a clean, dark-themed interface and a simple, intuitive user experience with exciting user interfaces.
+This is a modern, responsive web application designed to help people post and find lost or found items. It features a clean, dark-themed interface and a simple, intuitive user experience with user friendly.
 
 ## Key Features
 
