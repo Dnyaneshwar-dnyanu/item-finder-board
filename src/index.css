@@ -8,63 +8,6 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 40 20% 97%;
-    --foreground: 220 20% 15%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 15%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 15%;
-
-    --primary: 220 25% 25%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 40 15% 92%;
-    --secondary-foreground: 220 20% 15%;
-
-    --muted: 40 10% 94%;
-    --muted-foreground: 220 15% 45%;
-
-    --accent: 40 10% 90%;
-    --accent-foreground: 220 20% 15%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 40 15% 88%;
-    --input: 40 15% 92%;
-    --ring: 220 25% 25%;
-
-    --radius: 0.75rem;
-
-    /* Custom tokens for Lost & Found */
-    --lost: 25 95% 53%;
-    --lost-foreground: 0 0% 100%;
-    --lost-light: 25 100% 96%;
-    
-    --found: 180 75% 45%;
-    --found-foreground: 0 0% 100%;
-    --found-light: 180 100% 96%;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
     --background: 220 25% 10%;
     --foreground: 40 20% 95%;
 
@@ -93,6 +36,8 @@ All colors MUST be HSL.
     --input: 220 20% 18%;
     --ring: 40 20% 80%;
 
+    --radius: 0.75rem;
+
     /* Custom tokens for Lost & Found */
     --lost: 25 85% 55%;
     --lost-foreground: 0 0% 100%;
@@ -111,6 +56,7 @@ All colors MUST be HSL.
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
 }
 
 @layer base {
@@ -121,4 +67,31 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer utilities {
+    /* Floating animation */
+    .floating {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    /* Radiant text */
+    .radiant-text {
+        background-image: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--lost)), hsl(var(--found)), hsl(var(--primary)));
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: radiant-flow 5s linear infinite;
+    }
+
+    @keyframes radiant-flow {
+        to {
+            background-position: -200% center;
+        }
+    }
 }
