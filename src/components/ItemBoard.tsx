@@ -1,20 +1,21 @@
-import { ItemData } from "./ItemForm";
+
+import { Item } from "@/lib/firebase"; // Updated import
 import { ItemCard } from "./ItemCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ItemBoardProps {
-  items: ItemData[];
+  items: Item[]; // Updated type
 }
 
 export const ItemBoard = ({ items }: ItemBoardProps) => {
   const lostItems = items.filter((item) => item.item_type === "Lost");
   const foundItems = items.filter((item) => item.item_type === "Found");
 
-  const renderItems = (itemList: ItemData[]) => {
+  const renderItems = (itemList: Item[]) => { // Updated type
     if (itemList.length === 0) {
       return (
         <div className="text-center py-12 text-muted-foreground">
-          No items posted yet
+          No items posted in this category.
         </div>
       );
     }

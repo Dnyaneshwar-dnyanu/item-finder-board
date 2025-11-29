@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,30 +13,37 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-
-export interface ItemData {
-  id: string;
-  item_name: string;
-  item_type: "Lost" | "Found";
-  description: string;
-  location: string;
-  date: string;
-}
+import { addItem, Item } from "@/lib/firebase"; // Import addItem and Item type
 
 interface ItemFormProps {
-  onSubmit: (data: Omit<ItemData, "id">) => void;
+  onItemAdded: () => void; // Callback to refresh the item list
 }
 
-export const ItemForm = ({ onSubmit }: ItemFormProps) => {
-  const [formData, setFormData] = useState({
+export const ItemForm = ({ onItemAdded }: ItemFormProps) => {
+  const [formData, setFormData] = useState<Omit<Item, 'id' | 'imageUrl'>>({
     item_name: "",
-    item_type: "" as "Lost" | "Found" | "",
+    item_type: "Lost", // Default value
     description: "",
     location: "",
     date: new Date().toISOString().split("T")[0],
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        // Check for valid image type
+        if (!file.type.startsWith('image/')) {
+            toast.error("Please upload a valid image file.");
+            e.target.value = ''; // Reset the input
+            return;
+        }
+        setImageFile(file);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.item_type) {
@@ -43,21 +51,30 @@ export const ItemForm = ({ onSubmit }: ItemFormProps) => {
       return;
     }
 
-    onSubmit({
-      ...formData,
-      item_type: formData.item_type as "Lost" | "Found",
-    });
+    if (formData.item_type === 'Found' && !imageFile) {
+        toast.error("Please upload an image for the found item.");
+        return;
+    }
 
-    // Reset form
-    setFormData({
-      item_name: "",
-      item_type: "",
-      description: "",
-      location: "",
-      date: new Date().toISOString().split("T")[0],
-    });
+    setIsSubmitting(true);
+    const newItemId = await addItem(formData, imageFile || undefined);
+    setIsSubmitting(false);
 
-    toast.success("Item posted successfully!");
+    if (newItemId) {
+      // Reset form
+      setFormData({
+        item_name: "",
+        item_type: "Lost",
+        description: "",
+        location: "",
+        date: new Date().toISOString().split("T")[0],
+      });
+      setImageFile(null);
+      toast.success("Item posted successfully!");
+      onItemAdded(); // Trigger refresh
+    } else {
+      toast.error("Failed to post item. Please try again.");
+    }
   };
 
   return (
@@ -78,6 +95,7 @@ export const ItemForm = ({ onSubmit }: ItemFormProps) => {
               value={formData.item_name}
               onChange={(e) => setFormData({ ...formData, item_name: e.target.value })}
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -89,6 +107,7 @@ export const ItemForm = ({ onSubmit }: ItemFormProps) => {
                 setFormData({ ...formData, item_type: value })
               }
               required
+              disabled={isSubmitting}
             >
               <SelectTrigger id="item_type">
                 <SelectValue placeholder="Select item type" />
@@ -100,6 +119,22 @@ export const ItemForm = ({ onSubmit }: ItemFormProps) => {
             </Select>
           </div>
 
+          {/* Conditional Image Upload for 'Found' items */}
+          {formData.item_type === 'Found' && (
+            <div className="space-y-2">
+                <Label htmlFor="item_image">Image of Found Item *</Label>
+                <Input 
+                    id="item_image" 
+                    type="file" 
+                    onChange={handleImageChange} 
+                    required
+                    disabled={isSubmitting}
+                    accept="image/*" // Accept only image files
+                />
+                {imageFile && <p className="text-sm text-muted-foreground">Selected: {imageFile.name}</p>}
+            </div>
+           )}
+
           <div className="space-y-2">
             <Label htmlFor="description">Description *</Label>
             <Textarea
@@ -109,6 +144,7 @@ export const ItemForm = ({ onSubmit }: ItemFormProps) => {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
               rows={4}
+              disabled={isSubmitting}
             />
           </div>
 
@@ -120,6 +156,7 @@ export const ItemForm = ({ onSubmit }: ItemFormProps) => {
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -131,11 +168,12 @@ export const ItemForm = ({ onSubmit }: ItemFormProps) => {
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
               required
+              disabled={isSubmitting}
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Post Item
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? "Posting..." : "Post Item"}
           </Button>
         </form>
       </CardContent>
